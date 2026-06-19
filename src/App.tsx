@@ -1,163 +1,129 @@
-import { BrowserRouter, Routes, Route, Link, NavLink } from "react-router-dom";
 import { useState } from "react";
-import type { University } from "./data/schema";
-import Explorer from "./pages/Explorer";
+import { BrowserRouter, Routes, Route, NavLink, Navigate } from "react-router-dom";
+import {
+  Table2, BookOpen, FileText, Home, Menu, Map, GraduationCap,
+} from "lucide-react";
 import UniversityDetail from "./pages/UniversityDetail";
-import Compare from "./pages/Compare";
-import ProfileMatcher from "./pages/ProfileMatcher";
+import UniversityTable from "./pages/UniversityTable";
 import GeneralProcess from "./pages/GeneralProcess";
 import Visa from "./pages/Visa";
+import AfterArrival from "./pages/AfterArrival";
+import Scholarships from "./pages/Scholarships";
 import NotFound from "./pages/NotFound";
-import CompareTray from "./components/CompareTray";
-import { GitCompare, Map, BookOpen, FileText, Target } from "lucide-react";
 
-function NavBar({ compareCount }: { compareCount: number }) {
+const MAIN_NAV = [
+  { to: "/universities", icon: Table2, label: "Universities" },
+  { to: "/process", icon: BookOpen, label: "Process" },
+  { to: "/visa", icon: FileText, label: "Visa Guide" },
+  { to: "/scholarships", icon: GraduationCap, label: "Scholarships" },
+] as const;
+
+function navClass({ isActive }: { isActive: boolean }) {
+  return `relative flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+    isActive
+      ? "bg-indigo-500/15 text-white border-l-[3px] border-indigo-400 pl-[9px]"
+      : "text-slate-400 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent pl-[9px]"
+  }`;
+}
+
+function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose: () => void }) {
   return (
-    <header className="bg-[#0B1A33] text-white border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-14">
-          {/* Brand */}
-          <Link to="/" className="flex items-center gap-2 font-bold text-white hover:text-[#D9B84A] transition-colors">
-            <Map className="w-5 h-5 text-[#C9A227]" />
-            <span className="text-sm font-bold hidden sm:inline" style={{ fontFamily: "Playfair Display, serif" }}>
-              El Nadjah Explorer
-            </span>
-            <span className="text-sm font-bold sm:hidden" style={{ fontFamily: "Playfair Display, serif" }}>
-              EN Explorer
-            </span>
-          </Link>
+    <>
+      {mobileOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={onClose} />
+      )}
 
-          {/* Nav links */}
-          <nav className="flex items-center gap-1">
-            <NavLink
-              to="/"
-              end
-              className={({ isActive }) =>
-                `flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg transition-colors ${
-                  isActive ? "bg-white/10 text-white" : "text-blue-200 hover:bg-white/10 hover:text-white"
-                }`
-              }
-            >
-              <Map className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Explorer</span>
-            </NavLink>
-
-            <NavLink
-              to="/compare"
-              className={({ isActive }) =>
-                `flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg transition-colors relative ${
-                  isActive ? "bg-white/10 text-white" : "text-blue-200 hover:bg-white/10 hover:text-white"
-                }`
-              }
-            >
-              <GitCompare className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Compare</span>
-              {compareCount > 0 && (
-                <span className="ml-0.5 bg-[#C9A227] text-[#0B1A33] text-xs font-bold px-1.5 py-0.5 rounded-full leading-none">
-                  {compareCount}
-                </span>
-              )}
-            </NavLink>
-
-            <NavLink
-              to="/match"
-              className={({ isActive }) =>
-                `flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg transition-colors ${
-                  isActive ? "bg-white/10 text-white" : "text-blue-200 hover:bg-white/10 hover:text-white"
-                }`
-              }
-            >
-              <Target className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Profile Match</span>
-            </NavLink>
-
-            <NavLink
-              to="/process"
-              className={({ isActive }) =>
-                `flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg transition-colors ${
-                  isActive ? "bg-white/10 text-white" : "text-blue-200 hover:bg-white/10 hover:text-white"
-                }`
-              }
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Process</span>
-            </NavLink>
-
-            <NavLink
-              to="/visa"
-              className={({ isActive }) =>
-                `flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg transition-colors ${
-                  isActive ? "bg-white/10 text-white" : "text-blue-200 hover:bg-white/10 hover:text-white"
-                }`
-              }
-            >
-              <FileText className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Visa</span>
-            </NavLink>
-          </nav>
+      <aside
+        className={`fixed top-0 left-0 h-full w-[220px] bg-[#0F172A] flex flex-col z-50 transition-transform duration-200 ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0`}
+      >
+        {/* Brand */}
+        <div className="px-4 py-5 border-b border-white/8">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+              <Map className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <div className="text-white font-bold text-sm leading-none" style={{ fontFamily: "Playfair Display, serif" }}>
+                El Nadjah
+              </div>
+              <div className="text-indigo-400 text-[10px] leading-none mt-0.5 font-medium tracking-wide">
+                Study Abroad
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </header>
+
+        {/* Main nav */}
+        <nav className="flex-1 px-2 py-4 overflow-y-auto">
+          <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest px-3 mb-2">
+            Navigation
+          </p>
+          <div className="space-y-0.5">
+            {MAIN_NAV.map(({ to, icon: Icon, label }) => (
+              <NavLink key={to} to={to} onClick={onClose} className={navClass}>
+                <Icon className="w-4 h-4 flex-shrink-0" />
+                <span>{label}</span>
+              </NavLink>
+            ))}
+          </div>
+        </nav>
+
+        {/* After Arrival — bottom section */}
+        <div className="px-2 py-3 border-t border-white/8">
+          <NavLink to="/arrival" onClick={onClose} className={navClass}>
+            <Home className="w-4 h-4 flex-shrink-0" />
+            <span>After Arrival</span>
+          </NavLink>
+          <div className="mt-3 px-3">
+            <p className="text-[10px] text-slate-600 font-medium">Internal Tool</p>
+            <p className="text-[10px] text-slate-600">El Nadjah Agency</p>
+          </div>
+        </div>
+      </aside>
+    </>
   );
 }
 
 export default function App() {
-  const [compareList, setCompareList] = useState<University[]>([]);
-
-  const toggleCompare = (uni: University) => {
-    setCompareList(prev => {
-      if (prev.find(u => u.id === uni.id)) return prev.filter(u => u.id !== uni.id);
-      if (prev.length >= 4) return prev;
-      return [...prev, uni];
-    });
-  };
-
-  const clearCompare = () => setCompareList([]);
-
-  const removeFromCompare = (id: string) => {
-    setCompareList(prev => prev.filter(u => u.id !== id));
-  };
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-[#F8F9FC]" style={{ fontFamily: "Raleway, sans-serif" }}>
-        <NavBar compareCount={compareList.length} />
-        <main>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Explorer
-                  compareList={compareList}
-                  onToggleCompare={toggleCompare}
-                />
-              }
-            />
-            <Route
-              path="/university/:id"
-              element={
-                <UniversityDetail
-                  compareList={compareList}
-                  onToggleCompare={toggleCompare}
-                />
-              }
-            />
-            <Route
-              path="/compare"
-              element={
-                <Compare
-                  compareList={compareList}
-                  onRemove={removeFromCompare}
-                />
-              }
-            />
-            <Route path="/match" element={<ProfileMatcher />} />
-            <Route path="/process" element={<GeneralProcess />} />
-            <Route path="/visa" element={<Visa />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        <CompareTray compareList={compareList} onClear={clearCompare} />
+      <div className="min-h-screen bg-[#F8FAFC]" style={{ fontFamily: "Raleway, sans-serif" }}>
+        <Sidebar
+          mobileOpen={mobileSidebarOpen}
+          onClose={() => setMobileSidebarOpen(false)}
+        />
+
+        <div className="lg:ml-[220px] min-h-screen flex flex-col">
+          {/* Mobile top bar */}
+          <div className="lg:hidden flex items-center gap-3 px-4 py-3 bg-[#0F172A] text-white">
+            <button
+              onClick={() => setMobileSidebarOpen(true)}
+              className="p-1.5 rounded hover:bg-white/10"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <span className="text-sm font-bold" style={{ fontFamily: "Playfair Display, serif" }}>
+              El Nadjah
+            </span>
+          </div>
+
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Navigate to="/universities" replace />} />
+              <Route path="/universities" element={<UniversityTable />} />
+              <Route path="/university/:id" element={<UniversityDetail />} />
+              <Route path="/process" element={<GeneralProcess />} />
+              <Route path="/visa" element={<Visa />} />
+              <Route path="/arrival" element={<AfterArrival />} />
+              <Route path="/scholarships" element={<Scholarships />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+        </div>
       </div>
     </BrowserRouter>
   );
