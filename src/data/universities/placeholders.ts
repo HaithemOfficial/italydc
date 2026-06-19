@@ -5,17 +5,6 @@ const PLACEHOLDER_SUMMARY = "Detailed information coming soon. Visit the officia
 export const placeholders: University[] = [
   // Group A
   {
-    id: "cassino",
-    name: "University of Cassino and Southern Lazio",
-    city: "Cassino",
-    region: "Lazio",
-    officialWebsite: "https://www.unicas.it/",
-    group: "A",
-    scores: { difficulty: 3, scholarship: 9, visa: 9 },
-    status: "placeholder",
-    summary: PLACEHOLDER_SUMMARY,
-  },
-  {
     id: "messina",
     name: "University of Messina",
     city: "Messina",

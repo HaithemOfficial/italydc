@@ -1,21 +1,29 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route, NavLink, Navigate } from "react-router-dom";
 import {
-  Table2, BookOpen, FileText, Home, Menu, Map, GraduationCap,
+  Table2, BookOpen, FileText, Home, Menu, Map, LogOut,
 } from "lucide-react";
 import UniversityDetail from "./pages/UniversityDetail";
 import UniversityTable from "./pages/UniversityTable";
 import GeneralProcess from "./pages/GeneralProcess";
 import Visa from "./pages/Visa";
 import AfterArrival from "./pages/AfterArrival";
-import Scholarships from "./pages/Scholarships";
+import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+
+const AUTH_KEY = "elnadjah_auth";
+
+function useAuth() {
+  const [authed, setAuthed] = useState(() => sessionStorage.getItem(AUTH_KEY) === "1");
+  const login = () => { sessionStorage.setItem(AUTH_KEY, "1"); setAuthed(true); };
+  const logout = () => { sessionStorage.removeItem(AUTH_KEY); setAuthed(false); };
+  return { authed, login, logout };
+}
 
 const MAIN_NAV = [
   { to: "/universities", icon: Table2, label: "Universities" },
   { to: "/process", icon: BookOpen, label: "Process" },
   { to: "/visa", icon: FileText, label: "Visa Guide" },
-  { to: "/scholarships", icon: GraduationCap, label: "Scholarships" },
 ] as const;
 
 function navClass({ isActive }: { isActive: boolean }) {
@@ -26,7 +34,7 @@ function navClass({ isActive }: { isActive: boolean }) {
   }`;
 }
 
-function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose: () => void }) {
+function Sidebar({ mobileOpen, onClose, onLogout }: { mobileOpen: boolean; onClose: () => void; onLogout: () => void }) {
   return (
     <>
       {mobileOpen && (
@@ -80,6 +88,13 @@ function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose: () => 
             <p className="text-[10px] text-slate-600 font-medium">Internal Tool</p>
             <p className="text-[10px] text-slate-600">El Nadjah Agency</p>
           </div>
+          <button
+            onClick={onLogout}
+            className="flex items-center gap-2 w-full px-3 py-2 mt-1 rounded-lg text-xs text-slate-500 hover:text-white hover:bg-white/5 transition-all"
+          >
+            <LogOut className="w-3.5 h-3.5 flex-shrink-0" />
+            Sign out
+          </button>
         </div>
       </aside>
     </>
@@ -88,6 +103,9 @@ function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose: () => 
 
 export default function App() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const { authed, login, logout } = useAuth();
+
+  if (!authed) return <Login onLogin={login} />;
 
   return (
     <BrowserRouter>
@@ -95,6 +113,7 @@ export default function App() {
         <Sidebar
           mobileOpen={mobileSidebarOpen}
           onClose={() => setMobileSidebarOpen(false)}
+          onLogout={logout}
         />
 
         <div className="lg:ml-[220px] min-h-screen flex flex-col">
@@ -119,7 +138,6 @@ export default function App() {
               <Route path="/process" element={<GeneralProcess />} />
               <Route path="/visa" element={<Visa />} />
               <Route path="/arrival" element={<AfterArrival />} />
-              <Route path="/scholarships" element={<Scholarships />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

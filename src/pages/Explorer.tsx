@@ -6,9 +6,8 @@ import { universities } from "../data/index";
 import { searchUniversities } from "../lib/search";
 import SearchBar from "../components/SearchBar";
 import UniversityCard from "../components/UniversityCard";
-import CompareTray from "../components/CompareTray";
 
-type SortKey = "difficulty" | "scholarship" | "visa" | "name";
+type SortKey = "name" | "group";
 
 interface Props {
   compareList: University[];
@@ -38,7 +37,7 @@ export default function Explorer({ compareList, onToggleCompare }: Props) {
     status: (searchParams.get("status") as DataStatus | "all") ?? "all",
   });
   const [sortBy, setSortBy] = useState<SortKey>(
-    (searchParams.get("sort") as SortKey) ?? "scholarship"
+    (searchParams.get("sort") as SortKey) ?? "group"
   );
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -48,13 +47,17 @@ export default function Explorer({ compareList, onToggleCompare }: Props) {
     if (query) params.q = query;
     if (filters.group !== "all") params.group = filters.group;
     if (filters.status !== "all") params.status = filters.status;
-    if (sortBy !== "scholarship") params.sort = sortBy;
+    if (sortBy !== "group") params.sort = sortBy;
     setSearchParams(params, { replace: true });
   }, [query, filters, sortBy, setSearchParams]);
 
   // Keyboard shortcuts
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === "/" && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement)) {
+    if (
+      e.key === "/" &&
+      !(e.target instanceof HTMLInputElement) &&
+      !(e.target instanceof HTMLTextAreaElement)
+    ) {
       e.preventDefault();
       document.querySelector<HTMLInputElement>('input[type="text"]')?.focus();
     }
@@ -78,23 +81,17 @@ export default function Explorer({ compareList, onToggleCompare }: Props) {
     filtered = filtered.filter(u => u.status === filters.status);
   }
   if (filters.hasEnglish === true) {
-    filtered = filtered.filter(u =>
-      u.programs?.some(p => p.taughtIn === "English") || u.languageRequirements?.english
+    filtered = filtered.filter(
+      u =>
+        u.programs?.some(p => p.taughtIn === "English") ||
+        u.languageRequirements?.english
     );
   }
 
   // Sort
   filtered = [...filtered].sort((a, b) => {
     if (sortBy === "name") return a.name.localeCompare(b.name);
-    if (sortBy === "difficulty") {
-      return (a.scores?.difficulty ?? 999) - (b.scores?.difficulty ?? 999);
-    }
-    if (sortBy === "scholarship") {
-      return (b.scores?.scholarship ?? 0) - (a.scores?.scholarship ?? 0);
-    }
-    if (sortBy === "visa") {
-      return (b.scores?.visa ?? 0) - (a.scores?.visa ?? 0);
-    }
+    if (sortBy === "group") return (a.group ?? "Z").localeCompare(b.group ?? "Z");
     return 0;
   });
 
@@ -104,33 +101,35 @@ export default function Explorer({ compareList, onToggleCompare }: Props) {
   const resetFilters = () => setFilters(DEFAULT_FILTERS);
 
   return (
-    <div className="min-h-screen bg-[#F8F9FC]" style={{ paddingBottom: compareList.length > 0 ? "80px" : "0" }}>
-      {/* Hero */}
-      <div className="bg-[#0B1A33] text-white">
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: "Playfair Display, serif" }}>
-              El Nadjah Study Abroad Explorer
-            </h1>
-            <p className="text-blue-200 mb-8 text-sm">
-              Italian universities · Algeria visa guide · Profile matching — internal tool for El Nadjah Agency agents
-            </p>
-            <SearchBar
-              value={query}
-              onChange={setQuery}
-              placeholder="Search universities by name, city, or group… (press / to focus)"
-            />
-            <p className="text-xs text-blue-300 mt-2">
-              Press <kbd className="bg-blue-900 px-1.5 py-0.5 rounded text-blue-200 font-mono">/</kbd> to focus search &nbsp;·&nbsp;
-              <kbd className="bg-blue-900 px-1.5 py-0.5 rounded text-blue-200 font-mono">Esc</kbd> to clear
-            </p>
-          </div>
+    <div
+      className="min-h-screen bg-[#F1F4F9]"
+      style={{ paddingBottom: compareList.length > 0 ? "80px" : "0" }}
+    >
+      {/* Page header */}
+      <div className="bg-white border-b border-[#E5E8EF] px-6 py-3 flex items-center gap-4 flex-wrap">
+        <div>
+          <h1
+            className="text-base font-bold text-gray-900"
+            style={{ fontFamily: "Playfair Display, serif" }}
+          >
+            University Explorer
+          </h1>
+          <p className="text-xs text-gray-500">
+            Find and compare Italian universities for your clients
+          </p>
+        </div>
+        <div className="flex-1 max-w-md ml-auto">
+          <SearchBar
+            value={query}
+            onChange={setQuery}
+            placeholder="Search universities… (press / to focus)"
+          />
         </div>
       </div>
 
       {/* Controls bar */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4 flex-wrap">
+      <div className="bg-white border-b border-[#E5E8EF] px-6 sticky top-0 z-30">
+        <div className="py-2.5 flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setFiltersOpen(v => !v)}
@@ -144,7 +143,13 @@ export default function Explorer({ compareList, onToggleCompare }: Props) {
               Filters
               {hasActiveFilters && (
                 <span className="ml-1 bg-blue-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
-                  {[filters.group !== "all", filters.status !== "all", filters.hasEnglish !== null].filter(Boolean).length}
+                  {
+                    [
+                      filters.group !== "all",
+                      filters.status !== "all",
+                      filters.hasEnglish !== null,
+                    ].filter(Boolean).length
+                  }
                 </span>
               )}
             </button>
@@ -166,9 +171,7 @@ export default function Explorer({ compareList, onToggleCompare }: Props) {
               onChange={e => setSortBy(e.target.value as SortKey)}
               className="text-sm border border-gray-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-blue-400"
             >
-              <option value="scholarship">Scholarship odds</option>
-              <option value="visa">Visa success</option>
-              <option value="difficulty">Difficulty (easier first)</option>
+              <option value="group">Group (A → C)</option>
               <option value="name">Name (A–Z)</option>
             </select>
           </div>
@@ -180,10 +183,12 @@ export default function Explorer({ compareList, onToggleCompare }: Props) {
 
         {/* Filter panel */}
         {filtersOpen && (
-          <div className="border-t border-gray-100 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 py-4 flex flex-wrap gap-6">
+          <div className="border-t border-gray-100 bg-gray-50 -mx-6 px-6">
+            <div className="py-4 flex flex-wrap gap-6">
               <div>
-                <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Group</p>
+                <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">
+                  Group
+                </p>
                 <div className="flex gap-2">
                   {(["all", "A", "B", "C"] as const).map(g => (
                     <button
@@ -202,7 +207,9 @@ export default function Explorer({ compareList, onToggleCompare }: Props) {
               </div>
 
               <div>
-                <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Status</p>
+                <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">
+                  Status
+                </p>
                 <div className="flex gap-2">
                   {(["all", "complete", "placeholder"] as const).map(s => (
                     <button
@@ -221,7 +228,9 @@ export default function Explorer({ compareList, onToggleCompare }: Props) {
               </div>
 
               <div>
-                <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Language</p>
+                <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">
+                  Language
+                </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setFilters(f => ({ ...f, hasEnglish: null }))}
@@ -251,16 +260,22 @@ export default function Explorer({ compareList, onToggleCompare }: Props) {
       </div>
 
       {/* Grid */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="p-6">
         {filtered.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">🔍</div>
-            <h2 className="text-xl font-bold text-gray-700 mb-2" style={{ fontFamily: "Playfair Display, serif" }}>
+            <h2
+              className="text-xl font-bold text-gray-700 mb-2"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
               No university matches "{query}"
             </h2>
             <p className="text-gray-500">Try a shorter term or reset your filters.</p>
             <button
-              onClick={() => { setQuery(""); resetFilters(); }}
+              onClick={() => {
+                setQuery("");
+                resetFilters();
+              }}
               className="mt-4 text-blue-600 underline text-sm"
             >
               Clear search and filters
@@ -280,10 +295,6 @@ export default function Explorer({ compareList, onToggleCompare }: Props) {
           </div>
         )}
       </div>
-
-      <CompareTray compareList={compareList} onClear={() => {
-        compareList.forEach(u => onToggleCompare(u));
-      }} />
     </div>
   );
 }

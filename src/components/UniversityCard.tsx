@@ -1,6 +1,5 @@
 import type { University } from "../data/schema";
 import GroupBadge from "./GroupBadge";
-import ScoreMeter from "./ScoreMeter";
 import StatusPill from "./StatusPill";
 import { MapPin, GitCompare } from "lucide-react";
 
@@ -12,7 +11,7 @@ interface Props {
 }
 
 export default function UniversityCard({ university, isInCompare, onToggleCompare, onClick }: Props) {
-  const { name, shortName, city, region, group, scores, status, summary } = university;
+  const { name, shortName, city, region, group, status, summary } = university;
 
   return (
     <div
@@ -46,28 +45,6 @@ export default function UniversityCard({ university, isInCompare, onToggleCompar
 
         <div className="mb-3">
           <GroupBadge group={group} size="sm" />
-        </div>
-
-        {/* Score meters */}
-        <div className="space-y-1">
-          <ScoreMeter
-            label="Difficulty (lower = easier)"
-            score={scores?.difficulty}
-            type="difficulty"
-            compact
-          />
-          <ScoreMeter
-            label="Scholarship odds"
-            score={scores?.scholarship}
-            type="scholarship"
-            compact
-          />
-          <ScoreMeter
-            label="Visa success"
-            score={scores?.visa}
-            type="visa"
-            compact
-          />
         </div>
       </div>
 

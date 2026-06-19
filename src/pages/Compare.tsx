@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import type { University } from "../data/schema";
 import GroupBadge from "../components/GroupBadge";
-import ScoreMeter from "../components/ScoreMeter";
 import { X, ArrowLeft } from "lucide-react";
 
 interface Props {
@@ -11,22 +10,23 @@ interface Props {
 
 function getCellValue(uni: University, field: string): string {
   if (uni.status === "placeholder") {
-    const alwaysAvailable = ["group", "difficulty", "scholarship", "visa", "website"];
+    const alwaysAvailable = ["group", "website"];
     if (!alwaysAvailable.includes(field)) return "coming soon";
   }
   switch (field) {
     case "group": return uni.group ?? "—";
-    case "difficulty": return uni.scores?.difficulty !== undefined ? `${uni.scores.difficulty}/10` : "—";
-    case "scholarship": return uni.scores?.scholarship !== undefined ? `${uni.scores.scholarship}/10` : "—";
-    case "visa": return uni.scores?.visa !== undefined ? `${uni.scores.visa}/10` : "—";
     case "englishCert": {
       const certs = uni.languageRequirements?.english?.acceptedCerts;
       if (!certs?.length) return "—";
       const ielts = certs.find(c => c.name.toLowerCase().includes("ielts"));
       return ielts ? `IELTS ${ielts.minScore ?? "B2+"}` : `B2 (${certs[0].name})`;
     }
-    case "visaDeadline": {
-      const d = uni.deadlines?.find(dd => dd.what.toLowerCase().includes("visa") || dd.what.toLowerCase().includes("universitaly"));
+    case "appDeadline": {
+      const nonVisa = uni.deadlines?.filter(d => !d.what.toLowerCase().includes("visa")) ?? [];
+      const d = nonVisa.find(d =>
+        (d.what.toLowerCase().includes("enrol") || d.what.toLowerCase().includes("application") || d.what.toLowerCase().includes("pre-admission")) && d.until
+      ) ?? nonVisa.find(d => d.what.toLowerCase().includes("universitaly") && d.until)
+        ?? nonVisa.find(d => d.until);
       return d?.until ?? "—";
     }
     case "fee": {
@@ -42,12 +42,9 @@ function getCellValue(uni: University, field: string): string {
 
 const ROWS = [
   { key: "group", label: "Profile Group" },
-  { key: "difficulty", label: "Difficulty (lower = easier)" },
-  { key: "scholarship", label: "Scholarship Odds" },
-  { key: "visa", label: "Visa Success Score" },
-  { key: "englishCert", label: "English Cert (min score)" },
-  { key: "visaDeadline", label: "Key Visa Deadline" },
-  { key: "fee", label: "Fixed Fee (range)" },
+  { key: "englishCert", label: "English Cert (min)" },
+  { key: "appDeadline", label: "Application Deadline" },
+  { key: "fee", label: "Fee Range" },
   { key: "website", label: "Official Website" },
 ];
 
@@ -114,22 +111,6 @@ export default function Compare({ compareList, onRemove }: Props) {
             </tr>
           </thead>
           <tbody>
-            {/* Score meters row */}
-            <tr className="border-b border-gray-100">
-              <td className="px-4 py-3 bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Score Overview
-              </td>
-              {compareList.map(uni => (
-                <td key={uni.id} className="px-4 py-3 bg-white border-b border-gray-100">
-                  <div className="space-y-1.5">
-                    <ScoreMeter label="Difficulty (lower = easier)" score={uni.scores?.difficulty} type="difficulty" compact />
-                    <ScoreMeter label="Scholarship" score={uni.scores?.scholarship} type="scholarship" compact />
-                    <ScoreMeter label="Visa success" score={uni.scores?.visa} type="visa" compact />
-                  </div>
-                </td>
-              ))}
-            </tr>
-
             {ROWS.map((row, ri) => (
               <tr key={row.key} className={ri % 2 === 0 ? "bg-gray-50" : "bg-white"}>
                 <td className="px-4 py-3 text-sm font-medium text-gray-600 border-b border-gray-100">
