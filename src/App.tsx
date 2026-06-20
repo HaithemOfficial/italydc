@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route, NavLink, Navigate } from "react-router-dom";
 import {
-  Table2, BookOpen, FileText, Home, Menu, Map, LogOut, Globe,
+  Table2, BookOpen, FileText, Home, Menu, Map, LogOut, Globe, GraduationCap,
 } from "lucide-react";
 import UniversityDetail from "./pages/UniversityDetail";
 import UniversityTable from "./pages/UniversityTable";
@@ -77,6 +77,12 @@ function Sidebar({ mobileOpen, onClose, onLogout }: { mobileOpen: boolean; onClo
                 <span>{label}</span>
               </NavLink>
             ))}
+            {/* Disabled — Scholarships (built, not yet active) */}
+            <div className="relative flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium border-l-[3px] border-transparent pl-[9px] text-slate-600 opacity-50 cursor-not-allowed select-none">
+              <GraduationCap className="w-4 h-4 flex-shrink-0" />
+              <span>Scholarships</span>
+              <span className="ml-auto text-[9px] font-bold uppercase tracking-wide text-slate-500">Soon</span>
+            </div>
           </div>
         </nav>
 
