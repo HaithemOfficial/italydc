@@ -85,6 +85,28 @@ export interface Scholarship {
   notes?: string;
 }
 
+export interface ResidencePermitCostRow {
+  item: string;
+  cost: string;
+}
+
+export interface ResidencePermitStep {
+  step: string;
+  detail: string;
+  warning?: string;
+}
+
+export interface ResidencePermitProcedure {
+  costs: ResidencePermitCostRow[];
+  firstIssuanceSteps: ResidencePermitStep[];
+  ssnNotes: string[];
+  renewal: {
+    overview: string;
+    prerequisites: string[];
+    documentsNote: string;
+  };
+}
+
 export interface VisaAndArrival {
   financialProof?: string;
   accommodation?: string;
@@ -92,6 +114,7 @@ export interface VisaAndArrival {
   residencePermit?: string;
   taxCode?: string;
   notes?: string;
+  residencePermitProcedure?: ResidencePermitProcedure;
 }
 
 export interface University {

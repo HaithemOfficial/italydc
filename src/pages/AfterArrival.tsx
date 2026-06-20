@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { universities } from "../data/index";
-import type { University } from "../data/schema";
+import type { University, ResidencePermitProcedure } from "../data/schema";
 import { Link } from "react-router-dom";
-import { Home, ExternalLink } from "lucide-react";
+import { Home, ExternalLink, ChevronDown, AlertTriangle, BadgeEuro, ListChecks, Heart, RefreshCw } from "lucide-react";
 
 const FIELDS: { key: keyof NonNullable<University["visaAndArrival"]>; label: string }[] = [
   { key: "financialProof", label: "Financial Proof Required" },
@@ -12,6 +13,144 @@ const FIELDS: { key: keyof NonNullable<University["visaAndArrival"]>; label: str
 ];
 
 const completeUnis = universities.filter(u => u.status === "complete" && u.visaAndArrival);
+
+function ResidencePermitSection({ proc }: { proc: ResidencePermitProcedure }) {
+  const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState<"issuance" | "ssn" | "renewal">("issuance");
+
+  return (
+    <div className="border-t border-gray-100">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full px-5 py-3.5 flex items-center justify-between text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+      >
+        <span className="flex items-center gap-2">
+          <ListChecks className="w-4 h-4 text-indigo-500" />
+          Residence Permit — Full Step-by-Step Procedure
+        </span>
+        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      {open && (
+        <div className="px-5 pb-6 space-y-5">
+
+          {/* Costs table */}
+          <div>
+            <div className="flex items-center gap-1.5 mb-2.5">
+              <BadgeEuro className="w-3.5 h-3.5 text-emerald-600" />
+              <p className="text-xs font-bold text-gray-600 uppercase tracking-wide">Costs at a glance</p>
+            </div>
+            <div className="rounded-lg border border-gray-200 overflow-hidden">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-gray-50 border-b border-gray-200">
+                    <th className="px-3 py-2 text-left font-semibold text-gray-500">Item</th>
+                    <th className="px-3 py-2 text-left font-semibold text-gray-500">Cost</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {proc.costs.map((row, i) => (
+                    <tr key={i} className="hover:bg-gray-50">
+                      <td className="px-3 py-2 text-gray-700 font-medium">{row.item}</td>
+                      <td className="px-3 py-2 text-gray-600">{row.cost}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Tab switcher */}
+          <div className="flex gap-1 p-1 bg-gray-100 rounded-lg w-fit">
+            {(["issuance", "ssn", "renewal"] as const).map(t => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
+                  tab === t ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                {t === "issuance" ? "A) First Issuance" : t === "ssn" ? "SSN Registration" : "B) Renewal"}
+              </button>
+            ))}
+          </div>
+
+          {/* A) First Issuance */}
+          {tab === "issuance" && (
+            <div className="space-y-3">
+              {proc.firstIssuanceSteps.map((s, i) => (
+                <div key={i} className="rounded-lg border border-gray-200 overflow-hidden">
+                  <div className="bg-gray-50 px-4 py-2.5 border-b border-gray-200">
+                    <p className="text-xs font-bold text-gray-800">{s.step}</p>
+                  </div>
+                  <div className="px-4 py-3 space-y-2">
+                    <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">{s.detail}</p>
+                    {s.warning && (
+                      <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-md px-3 py-2 mt-2">
+                        <AlertTriangle className="w-3.5 h-3.5 text-amber-600 flex-shrink-0 mt-0.5" />
+                        <p className="text-xs text-amber-800 leading-relaxed">{s.warning}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* SSN Registration */}
+          {tab === "ssn" && (
+            <div className="rounded-lg border border-blue-200 bg-blue-50 overflow-hidden">
+              <div className="px-4 py-2.5 border-b border-blue-200 flex items-center gap-1.5">
+                <Heart className="w-3.5 h-3.5 text-blue-600" />
+                <p className="text-xs font-bold text-blue-800">SSN — National Health Service Registration</p>
+              </div>
+              <ul className="px-4 py-3 space-y-2.5">
+                {proc.ssnNotes.map((note, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="w-4 h-4 rounded-full bg-blue-200 text-blue-700 text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                    <p className="text-xs text-blue-900 leading-relaxed">{note}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* B) Renewal */}
+          {tab === "renewal" && (
+            <div className="space-y-3">
+              <div className="rounded-lg border border-gray-200 px-4 py-3">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <RefreshCw className="w-3.5 h-3.5 text-indigo-500" />
+                  <p className="text-xs font-bold text-gray-700">Overview</p>
+                </div>
+                <p className="text-xs text-gray-600 leading-relaxed">{proc.renewal.overview}</p>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 overflow-hidden">
+                <div className="bg-gray-50 px-4 py-2.5 border-b border-gray-200">
+                  <p className="text-xs font-bold text-gray-800">Prerequisites — apply at least 60 days before expiry</p>
+                </div>
+                <ul className="px-4 py-3 space-y-2">
+                  {proc.renewal.prerequisites.map((req, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0 mt-1.5" />
+                      <p className="text-xs text-gray-600 leading-relaxed">{req}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 px-4 py-3">
+                <p className="text-xs font-bold text-gray-700 mb-1.5">Documents & remaining steps</p>
+                <p className="text-xs text-gray-600 leading-relaxed">{proc.renewal.documentsNote}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function AfterArrival() {
   return (
@@ -83,7 +222,7 @@ export default function AfterArrival() {
                 </div>
               </div>
 
-              {/* Fields */}
+              {/* Standard fields */}
               <div className="divide-y divide-gray-100">
                 {FIELDS.map(({ key, label }) => {
                   const val = va[key];
@@ -99,6 +238,11 @@ export default function AfterArrival() {
                   <div className="px-5 py-4 bg-amber-50">
                     <p className="text-xs text-amber-800 leading-relaxed">{va.notes}</p>
                   </div>
+                )}
+
+                {/* Detailed residence permit procedure (UNIBO and future unis) */}
+                {va.residencePermitProcedure && (
+                  <ResidencePermitSection proc={va.residencePermitProcedure} />
                 )}
               </div>
             </div>

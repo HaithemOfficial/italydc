@@ -465,6 +465,81 @@ export const unibo: University = {
       "Codice Fiscale required for SSN registration and enrolment. The Embassy may offer the service; otherwise obtain at Agenzia delle Entrate in Italy.",
     notes:
       "Contacts: LEGS programme: dsg.tutorlegs@unibo.it · dsg.legs@unibo.it. Studenti Online technical support: +39 051 2080301 (Mon–Fri 09:00–13:00 & 14:00–17:00) · credenziali.studio@unibo.it. International Desk Bologna: internationaldesk@unibo.it. Disability/SLD: ases.adattamentiammissione@unibo.it. Fees & benefits: ases.contribuzionistudentesche@unibo.it. Head of procedure: Dr. Sabrina Rambaldi.",
+
+    residencePermitProcedure: {
+      costs: [
+        { item: "Revenue stamp (marca da bollo)", cost: "€16.00 — buy 2 if also collecting a certificate at an office (one for the form, one for the certificate)" },
+        { item: "Post office payment slips", cost: "€30.46 + €40.00" },
+        { item: "Insured mail (shipping the kit)", cost: "€30.00" },
+        { item: "SSN registration (if not using private insurance)", cost: "€700/yr · dependants €2,000/yr · calendar year only" },
+        { item: "Economic-resources proof (minimum)", cost: "€7,000.97 (2025 figure — 2026 amount still being defined)" },
+      ],
+
+      firstIssuanceSteps: [
+        {
+          step: "Step 1 — Prepare documents (copy everything; keep originals)",
+          detail:
+            "• Certificate of enrolment from Studenti Online (self-certifications NOT accepted) with a €16 revenue stamp. Bachelor's/Master's/single units: download from Studenti Online once the career is activated, or collect from the Student Administration Office on enrolment. (Professional Master: master@unibo.it · PhD: aform.udottricerca@unibo.it · non-medical specialisation: aform.specnonmed@unibo.it · medical specialisation: sam.carrieremfs@unibo.it.) If enrolment is not yet complete, print the Universitaly pre-enrolment summary to start the permit now — once you have the real certificate, send it to the Questura by PEC and bring it to the biometric appointment.\n• Health coverage: copy of private insurance or SSN registration receipt.\n• Passport copy: pages with personal data, visa, Italy entry stamp, and any other visas / entry–exit stamps (skip blank pages).\n• Economic-resources proof (min €7,000.97): visa documents, or a bank/postal statement, or an official scholarship letter showing amount and duration.\n• Accommodation proof in Italy.",
+        },
+        {
+          step: "Step 2 — Obtain and fill in the application kit",
+          detail:
+            "The kit contains an envelope, forms, and a payment slip. You can get it at a Sportello Amico post office, or with campus-specific help:\n• Bologna: email ases.bolognapermit@unibo.it from your @studio.unibo.it address → within 3 working days you receive the assigned service centre and appointment. First-year students: the International Student Administration Office Bologna provides a tutor during the enrolment period.\n• Ravenna: Immigration Office, Town Council (Mon–Thu, no appointment) · or Via A. Baccarini 27, Tue morning / Thu afternoon by appointment: accoglienzastranieri@comune.ra.it.\n• Rimini: Foreign Citizens Front Office, Town Council.\n• Cesena: Cesena Town Council.\n• Forlì: Service Centre for the Integration and Inclusion of Migrants.\nOn the forms, enter Italian contact details: city, street, name on the doorbell, name on the mailbox, and your Italian mobile number.",
+          warning:
+            "Missing or incomplete documents can add several months to processing.",
+        },
+        {
+          step: "Step 3 — Send the application at a Sportello Amico post office",
+          detail:
+            "Bring: the completed kit, a €16 revenue stamp, and your original passport. Pay the two slips (€30.46 + €40.00). Complete the insured-mail form with your Italian address and pay €30.00 for shipping. You receive: a Questura appointment date (for biometrics) and an application receipt — keep both and a copy of the receipt on you at all times as proof of application for police checks.",
+          warning:
+            "Sign the first page of the kit ONLY in front of the post-office operator — not before.",
+        },
+        {
+          step: "Step 4 — Send the receipt to UNIBO",
+          detail:
+            "From your @studio.unibo.it email address, send the application receipt to your campus student administration office (Bologna / Cesena / Forlì / Ravenna / Rimini). They activate conditional enrolment: your career is live for 180 days — you can obtain certificates and sit exams during this window.",
+        },
+        {
+          step: "Step 5 — Questura biometric appointment",
+          detail:
+            "Bring: original passport, 4 recent identical passport photos (white background), the original application-delivery receipt, and the post-office paper showing the appointment date. You receive a code to track the permit application on the State Police website (enter the code or the insured-mail number). If you are handed a document citing \"art.10 bis Legge no. 241/90\", you must supplement the file with extra documents or comments within 10 days by PEC to the relevant Questura (Bologna / Ravenna / Rimini / Forlì / Cesena).",
+        },
+        {
+          step: "Step 6 — Collect the permit (~3–4 months after biometrics)",
+          detail:
+            "Check readiness on the State Police website. Bologna: book a pick-up slot online, print the booking, and bring it. Other cities: check the Questura's specific pick-up method. Keep a copy of the permit once collected.",
+        },
+        {
+          step: "Step 7 — Send the permit copy to UNIBO",
+          detail:
+            "Send front and back via the Virtual Desk \"Contact us\" form or from @studio.unibo.it to your campus office. Rimini-specific email: campusrimini.internationaldesk@unibo.it.",
+          warning:
+            "If the permit copy is not submitted, 180 days after the permit application the career is temporarily blocked — no exams can be taken.",
+        },
+      ],
+
+      ssnNotes: [
+        "€700/year, voluntary, covers you only (not family), calendar year (1 Jan–31 Dec) — even for a stay shorter than one year. Dependants: €2,000/year.",
+        "You can pay two years at once (e.g. 2026 + 2027 = two separate F24 payments) to cover a full academic year — especially useful for September arrivals on a 1-year study permit.",
+        "Pay via F24: contribuente section (your data) → sezione regioni → region code 06 (Emilia-Romagna) · codice tributo 8846 · anno di riferimento (e.g. 2026) · importi a debito versati €700. Submit two separate F24 forms if paying two years.",
+        "Payment alone does NOT activate coverage. After submitting the permit application, go to an AUSL Sportello Unico (CUP) with: passport, codice fiscale, enrolment certificate, F24 payment receipts, and the postal receipt of the permit application. Bologna CUP also requires the non-EU registration form. Choose a GP. The Health Card (tessera sanitaria) arrives by post to the address held by the Revenue Agency (Agenzia delle Entrate).",
+      ],
+
+      renewal: {
+        overview:
+          "Study residence permits last up to 12 months. Duration is tied to the health-insurance/SSN period and academic year — e.g. enrolled for a.y. 2026/27 means the permit can be issued at most until 31 March 2028. Programmes longer than 12 months require annual renewal. The permit cannot be renewed more than 3 years beyond the programme's normal duration (for Bachelor's / Master's / single-cycle).",
+        prerequisites: [
+          "Apply at least 60 days before the permit expiry date.",
+          "Renewed health insurance or SSN for the new period.",
+          "Enrolled in the next academic year, with exams passed and recorded on Studenti Online: at least 1 exam after the first year; at least 2 exams per year from the second year onward.",
+          "OFA units, CLA Italian-language courses, partial tests, and single parts of integrated exams do NOT count toward the exam requirement.",
+          "PhD students: must have been admitted by the Academic Board to the next year of the doctorate.",
+        ],
+        documentsNote:
+          "Same document set as first issuance, plus the expiring permit. Download the enrolment certificate with passed exams from Studenti Online: Certificates and self-certifications → \"Iscrizione con esami, date e voti\" → Certified (leave 'Purpose of the certificate' empty) → Next. Affix a €16 revenue stamp. Self-certifications are NOT accepted for this certificate. The rest of the process — kit, post office (same costs), sending the receipt to UNIBO for 180-day conditional career, Questura biometrics, ~3–4 month collection, and sending the permit copy — is identical to first issuance.",
+      },
+    },
   },
 
   importantNotes: [
