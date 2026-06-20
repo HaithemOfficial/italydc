@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route, NavLink, Navigate } from "react-router-dom";
 import {
-  Table2, BookOpen, FileText, Home, Menu, Map, LogOut,
+  Table2, BookOpen, FileText, Home, Menu, Map, LogOut, Globe,
 } from "lucide-react";
 import UniversityDetail from "./pages/UniversityDetail";
 import UniversityTable from "./pages/UniversityTable";
 import GeneralProcess from "./pages/GeneralProcess";
 import Visa from "./pages/Visa";
 import AfterArrival from "./pages/AfterArrival";
+import UniversitalyPage from "./pages/Universitaly";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -24,6 +25,7 @@ const MAIN_NAV = [
   { to: "/universities", icon: Table2, label: "Universities" },
   { to: "/process", icon: BookOpen, label: "Process" },
   { to: "/visa", icon: FileText, label: "Visa Guide" },
+  { to: "/universitaly", icon: Globe, label: "Universitaly" },
 ] as const;
 
 function navClass({ isActive }: { isActive: boolean }) {
@@ -138,6 +140,7 @@ export default function App() {
               <Route path="/process" element={<GeneralProcess />} />
               <Route path="/visa" element={<Visa />} />
               <Route path="/arrival" element={<AfterArrival />} />
+              <Route path="/universitaly" element={<UniversitalyPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
