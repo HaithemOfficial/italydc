@@ -304,20 +304,99 @@ export const unibo: University = {
   },
 
   scholarships: [
+    // ── FEE REDUCTIONS & EXEMPTIONS ─────────────────────────────────────────
     {
       name: "ER.GO — Right-to-Study Scholarship (Emilia-Romagna)",
       provider: "ER.GO — Azienda Regionale per il Diritto agli Studi Superiori",
       type: "Regional (income + merit)",
       link: "https://www.er-go.it",
       notes:
-        "Regional right-to-study authority for Emilia-Romagna. Benefits for income-eligible students: cash grant, university accommodation, free/discounted canteen. Algerian students require the ISEE Parificato. Amounts and bando deadlines change yearly — check er-go.it. Also handles accommodation requests for UNIBO students.",
+        "Regional right-to-study authority for Emilia-Romagna. Benefits for income-eligible students: cash grant (covers living costs), university accommodation in halls of residence, free/discounted canteen meals, transport subsidies. Algerian students require the ISEE Parificato. Amounts and bando deadlines change yearly — check er-go.it. Also handles housing grants for private rentals.",
     },
     {
-      name: "UNIBO First-Year Fee Exemption",
-      provider: "Università di Bologna",
-      type: "Internal — automatic, income-based",
+      name: "Fee Reduction by Economic Situation (ISEE-based)",
+      provider: "Università di Bologna — via ER.GO (Emilia-Romagna)",
+      type: "Regional (income-based)",
       notes:
-        "Full tuition fee exemption for first-year students with low ISEE. Applied automatically if the ISEE certificate is submitted by the October deadline. Submit ISEE as early as possible.",
+        "Tuition fee reductions or waivers based on financial situation are offered through the Region of Emilia-Romagna via ER.GO. Requires ISEE certificate submitted by 30 Oct 2026 (or 16 Nov with €100 late fee). Full exemption possible for low-income students.",
+    },
+    {
+      name: "Reduced Fixed Fee — Non-EU / Non-OECD / Developing Countries",
+      provider: "Università di Bologna",
+      type: "International student — automatic, citizenship-based",
+      notes:
+        "A reduced fixed tuition fee applies to citizens of particularly poor and developing countries, or of countries that are not members of both the EU and OECD. Algeria is not an OECD member — Algerian students should verify eligibility for this reduction on the UNIBO fees page (unibo.it). This can be combined with other benefits. Check the current fee table on studenti.unibo.it.",
+    },
+    {
+      name: "Total Merit-Based Fee Exemption — First Year, Second-Cycle",
+      provider: "Università di Bologna",
+      type: "Internal — merit-based (on-time graduation + top marks)",
+      notes:
+        "Full fee exemption for students enrolling in the first year of a Master's (second-cycle) programme who graduated on time and with top marks from their Bachelor's. Eligibility criteria are published on unibo.it. Relevant for Algerian students starting a Master's directly after a strong Bachelor's result.",
+    },
+    {
+      name: "Fee Exemption — Students with Disabilities",
+      provider: "Università di Bologna",
+      type: "Internal — disability-based",
+      notes:
+        "Full fee exemption for students with a certified civil disability of 66% or more, or certified under Law 104/92. Must submit the relevant certification to the university.",
+    },
+    {
+      name: "Fee Exemption — Parent on Disability Pension (Law 118/1971)",
+      provider: "Università di Bologna",
+      type: "Internal — family-situation-based",
+      notes:
+        "Full fee waiver available if a parent receives a disability pension under Law 118/1971. Documentation of the pension must be submitted.",
+    },
+    {
+      name: "Fee Exemption — Students Who Become Parents",
+      provider: "Università di Bologna",
+      type: "Internal — family-situation-based",
+      notes:
+        "Tuition fees can be waived for students who become a mother or father during the academic year. Apply through the university's student benefits office.",
+    },
+    {
+      name: "20% Fee Reduction — Family Member Also at University",
+      provider: "Università di Bologna",
+      type: "Internal — family-situation-based",
+      notes:
+        "Students who have another family member simultaneously enrolled at an Italian university qualify for a 20% fee reduction.",
+    },
+    {
+      name: "Fee Waiver — Members of Religious Orders",
+      provider: "Università di Bologna",
+      type: "Internal — special status",
+      notes:
+        "Permanent members of a recognised religious order who are entirely financially supported by that order may qualify for a full tuition fee waiver.",
+    },
+    // ── SCHOLARSHIPS ─────────────────────────────────────────────────────────
+    {
+      name: "\"150 Hours\" Collaboration Study Grant",
+      provider: "Università di Bologna",
+      type: "Internal — part-time collaboration (income + merit)",
+      notes:
+        "Students work approximately 150 hours per year in university services or projects in exchange for a financial grant. Combines work experience with financial support. Call published yearly on unibo.it.",
+    },
+    {
+      name: "Study Grant for Students in Difficulty",
+      provider: "Università di Bologna",
+      type: "Internal — hardship-based",
+      notes:
+        "Scholarships for students experiencing particular personal, family, or economic difficulties. Call for applications is usually published in September. Check unibo.it in September each year.",
+    },
+    {
+      name: "International Mobility Scholarship",
+      provider: "Università di Bologna",
+      type: "Internal — mobility/thesis abroad",
+      notes:
+        "Financial support for UNIBO students who spend a period studying or writing their thesis abroad (beyond standard Erasmus+). Check unibo.it for the annual call.",
+    },
+    {
+      name: "Scholarships and Study Awards (General Calls)",
+      provider: "Università di Bologna — various donors",
+      type: "Internal/External — merit or topic-specific",
+      notes:
+        "Various scholarships and awards are granted throughout the year, funded by the university or external partners. Calls are published continuously on unibo.it — check regularly.",
     },
     {
       name: "MAECI Italian Government Scholarship",
@@ -326,6 +405,50 @@ export const unibo: University = {
       link: "https://studyinitaly.esteri.it/",
       notes:
         "Algeria is an eligible country. Mainly for Master's, PhD, and research — not Bachelor's. Check the annual call on studyinitaly.esteri.it for AY 2027/28 deadlines.",
+    },
+    {
+      name: "Scholarship for Students from Conflict or Discriminatory-Policy Countries",
+      provider: "Università di Bologna",
+      type: "International student — humanitarian",
+      notes:
+        "UNIBO supports students enrolling from countries where conflict, discriminatory policies, or other causes make university access difficult or impossible for a significant part of the population. Check if Algeria qualifies under the current call on unibo.it.",
+    },
+    // ── CONCESSIONS & PERKS ──────────────────────────────────────────────────
+    {
+      name: "University Accommodation (ER.GO Halls of Residence)",
+      provider: "ER.GO — Emilia-Romagna",
+      type: "Regional — income-based housing",
+      link: "https://www.er-go.it",
+      notes:
+        "ER.GO manages student halls of residence across UNIBO campuses (Bologna, Forlì, Rimini, Ravenna, Cesena). Income-eligible students can also receive rent grants for private accommodation. Apply through er-go.it — deadlines are set yearly.",
+    },
+    {
+      name: "Discounted Canteen Meals",
+      provider: "Università di Bologna / ER.GO",
+      type: "Internal — subsidised meals",
+      notes:
+        "University canteens and participating restaurants offer discounted meals to UNIBO students. ER.GO scholarship holders may eat free or at reduced rates.",
+    },
+    {
+      name: "Discounted Public Transport Passes",
+      provider: "Università di Bologna",
+      type: "Internal — transport subsidy",
+      notes:
+        "UNIBO students can purchase public transport season passes at special student prices in Bologna, Cesena, Forlì, Ravenna, and Rimini. Check unibo.it for the current procedure.",
+    },
+    {
+      name: "Free Software Licences",
+      provider: "Università di Bologna",
+      type: "Internal — digital benefit",
+      notes:
+        "Enrolled students are eligible for free licences for: Matlab, Prezi, Stata SE, Microsoft 365, and Mathematica. Claim through the UNIBO IT services portal.",
+    },
+    {
+      name: "Peer Tutoring Grant",
+      provider: "Università di Bologna",
+      type: "Internal — collaboration/tutoring",
+      notes:
+        "Students can apply to become paid course tutors, supporting fellow students while earning a grant and gaining teaching experience. Calls published on unibo.it.",
     },
   ],
 
